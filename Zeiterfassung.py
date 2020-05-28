@@ -549,8 +549,11 @@ def show_report():
 
 
 def show_workpackage():
+    keylist = create_work_dictionary(workpackages)
+    from_date = keylist[0]
+    until_date = keylist[len(keylist) - 1]
     wp_name = workpackages[wp_index].wp_name
-    report = report_workpackage_summary(wp_name, workpackages)
+    report = report_workpackage_summary(wp_name, workpackages, from_date, until_date)
     display_report(report)
 
 
@@ -561,8 +564,7 @@ def show_workday():
 
 
 def show_balance():
-    report = create_work_dictionary(workpackages)
-    keylist = list(report.keys())
+    keylist = create_work_dictionary(workpackages)
     from_date = keylist[0]
     date = Date(from_date)
     from_date = QtCore.QDate(date.year, date.month, date.day)
