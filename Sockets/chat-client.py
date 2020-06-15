@@ -29,25 +29,27 @@ def service_connection(key, mask, message):
     data = key.data
     if mask & selectors.EVENT_WRITE:
         if not data.outb:
+            print(message.strip('\n'))
             data.outb = bytes(message, encoding='utf-8')
         if data.outb:
-            print("sending", repr(data.outb))
             sent = lsock.send(data.outb)
             data.outb = data.outb[sent:]
 
 
+file = open('..\Dateien\Bericht.txt', 'r', encoding='utf-8')
 gsock = start_connection(HOST, int(PORT))
-
-run = True
-while run:
-    try:
-        text = input("Nachricht>")
-    except KeyboardInterrupt:
-        text = "exit"
-        run = False
+lines = file.readlines()
+file.close()
+for text in lines:
     events = sel.select(timeout=1)
     if events:
         for l_key, l_mask in events:
             service_connection(l_key, l_mask, text)
+text = "exit"
+events = sel.select(timeout=1)
+if events:
+    for l_key, l_mask in events:
+        service_connection(l_key, l_mask, text)
 sel.unregister(gsock)
 sel.close()
+

@@ -1,6 +1,7 @@
 import socket
-import time
 import selectors
+import json
+import io
 import types
 
 HOST = "127.0.0.1"
@@ -26,13 +27,16 @@ def service_connection(key, mask):
         recv_data = sock.recv(1024)
         if recv_data:
             data.inb = recv_data
-            if data.inb == b'exit':
-                print("closing connection to", data.addr)
-                sel.unregister(sock)
-                sock.close()
-                return -1
-            else:
-                print("Received: ", data.inb)
+            message = data.inb.decode('utf-8').strip()
+            lines = message.split('\n')
+            for line in lines:
+                if line == "exit":
+                    print("closing connection to", data.addr)
+                    sel.unregister(sock)
+                    sock.close()
+                    return -1
+                else:
+                    print(line)
     return 0
 
 
