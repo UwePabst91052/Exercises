@@ -1,11 +1,37 @@
 import socket
 import selectors
 import types
-
-HOST = "127.0.0.1"
-PORT = 65432
+import ChatClientGui
+from PyQt5 import QtWidgets
 
 sel = selectors.DefaultSelector()
+
+
+class ChatClientWindow(QtWidgets.QMainWindow):
+    def __init__(self, parent=None):
+        super(ChatClientWindow, self).__init__(parent)
+
+    def connect_server(self):
+        global gsock
+        host = ui_window.lineEdit.text()
+        port = int(ui_window.lineEdit_2.text())
+        gsock = start_connection(host, int(port))
+
+    def disconnect_server(self):
+        text = "exit"
+        events = sel.select(timeout=1)
+        if events:
+            for l_key, l_mask in events:
+                service_connection(l_key, l_mask, text)
+        sel.unregister(gsock)
+        sel.close()
+
+    def send_message(self):
+        text = ui_window.messageEdit.toPlainText()
+        events = sel.select(timeout=1)
+        if events:
+            for l_key, l_mask in events:
+                service_connection(l_key, l_mask, text)
 
 
 def start_connection(host, port):
@@ -35,21 +61,11 @@ def service_connection(key, mask, message):
             sent = lsock.send(data.outb)
             data.outb = data.outb[sent:]
 
+gsock = None
 
-file = open('..\Dateien\Bericht.txt', 'r', encoding='utf-8')
-gsock = start_connection(HOST, int(PORT))
-lines = file.readlines()
-file.close()
-for text in lines:
-    events = sel.select(timeout=1)
-    if events:
-        for l_key, l_mask in events:
-            service_connection(l_key, l_mask, text)
-text = "exit"
-events = sel.select(timeout=1)
-if events:
-    for l_key, l_mask in events:
-        service_connection(l_key, l_mask, text)
-sel.unregister(gsock)
-sel.close()
-
+app = QtWidgets.QApplication([])
+ex = ChatClientWindow()
+ui_window = ChatClientGui.Ui_MainWindow()
+ui_window.setupUi(ex)
+ex.show()
+app.exec_()

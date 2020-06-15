@@ -49,13 +49,14 @@ sel.register(lsock, selectors.EVENT_READ, data=None)
 
 while True:
     ret = 0
-    events = sel.select(timeout=None)
+    try:
+        events = sel.select(timeout=None)
+    except KeyboardInterrupt:
+        break
     for key, mask in events:
         if key.data is None:
             accept_wrapper(key.fileobj)
         else:
             ret = service_connection(key, mask)
-    if ret < 0:
-        break
 
 sel.close()
