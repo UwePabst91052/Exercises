@@ -55,7 +55,6 @@ def service_connection(key, mask, message):
     data = key.data
     if mask & selectors.EVENT_WRITE:
         if not data.outb:
-            print(message.strip('\n'))
             data.outb = bytes(message, encoding='utf-8')
         if data.outb:
             sent = lsock.send(data.outb)
