@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import sys
 import socket
 import selectors
 import traceback
@@ -21,10 +20,14 @@ class ChatClientWindow(QtWidgets.QMainWindow):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def connect_server(self):
-        global gsock
+        global gsock, message
         host = ui_window.lineEdit.text()
         port = int(ui_window.lineEdit_2.text())
+        user = ui_window.lineEdit_3.text()
         gsock = start_connection(host, port)
+        message.request = create_request("login", user)
+        message.ready_to_send = True
+        message.set_selector_events_mask("w")
 
     def disconnect_server(self):
         global message
