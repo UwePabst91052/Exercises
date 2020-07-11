@@ -70,7 +70,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>150</y>
+      <y>140</y>
       <width>101</width>
       <height>16</height>
      </rect>
@@ -122,7 +122,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>170</y>
+      <y>160</y>
       <width>301</width>
       <height>71</height>
      </rect>
@@ -139,16 +139,6 @@
     </property>
     <property name="text">
      <string notr="true">Empfangene Nachrichten</string>
-    </property>
-   </widget>
-   <widget class="QPlainTextEdit" name="receivedEdit">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>320</y>
-      <width>301</width>
-      <height>71</height>
-     </rect>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
@@ -171,6 +161,26 @@
       <y>80</y>
       <width>131</width>
       <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listChatters">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>240</y>
+      <width>161</width>
+      <height>71</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listMessages">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>320</y>
+      <width>301</width>
+      <height>61</height>
      </rect>
     </property>
    </widget>

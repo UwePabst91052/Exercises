@@ -65,7 +65,15 @@ class ChatClientWindow(QtWidgets.QMainWindow):
                 message.close()
 
     def display_received_message(self, text):
-        ui_window.receivedEdit.setPlainText(text)
+        items = ui_window.listMessages.findItems(text, QtCore.Qt.MatchExactly)
+        if len(items) == 0:
+            ui_window.listMessages.addItem(text)
+
+    def display_chatters(self, chatters):
+        for chatter in chatters:
+            items = ui_window.listChatters.findItems(chatter, QtCore.Qt.MatchExactly)
+            if len(items) == 0:
+                ui_window.listChatters.addItem(chatter)
 
 
 def create_request(action, value):
