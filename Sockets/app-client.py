@@ -36,6 +36,7 @@ class ChatClientWindow(QtWidgets.QMainWindow):
         message.request = create_request(action, "client")
         message.ready_to_send = True
         message.set_selector_events_mask("w")
+        ui_window.listChatters.clear()
 
     def send_message(self):
         global message
@@ -44,6 +45,7 @@ class ChatClientWindow(QtWidgets.QMainWindow):
         message.request = create_request(action, value)
         message.ready_to_send = True
         message.set_selector_events_mask("w")
+        ui_window.messageEdit.clear()
 
     def monitor_selector(self):
         events = sel.select(timeout=None)
@@ -65,15 +67,13 @@ class ChatClientWindow(QtWidgets.QMainWindow):
                 message.close()
 
     def display_received_message(self, text):
-        items = ui_window.listMessages.findItems(text, QtCore.Qt.MatchExactly)
-        if len(items) == 0:
-            ui_window.listMessages.addItem(text)
+        ui_window.listMessages.addItem(text)
+        ui_window.listMessages.scrollToBottom()
 
     def display_chatters(self, chatters):
+        ui_window.listChatters.clear()
         for chatter in chatters:
-            items = ui_window.listChatters.findItems(chatter, QtCore.Qt.MatchExactly)
-            if len(items) == 0:
-                ui_window.listChatters.addItem(chatter)
+            ui_window.listChatters.addItem(chatter)
 
 
 def create_request(action, value):
