@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>340</width>
-    <height>423</height>
+    <height>461</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -184,6 +184,19 @@
      </rect>
     </property>
    </widget>
+   <widget class="QPushButton" name="clearButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>390</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Löschen</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -207,7 +220,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>46</x>
-     <y>98</y>
+     <y>131</y>
     </hint>
     <hint type="destinationlabel">
      <x>141</x>
@@ -223,7 +236,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>57</x>
-     <y>386</y>
+     <y>293</y>
     </hint>
     <hint type="destinationlabel">
      <x>145</x>
@@ -238,12 +251,44 @@
    <slot>disconnect_server()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>165</x>
-     <y>98</y>
+     <x>180</x>
+     <y>131</y>
     </hint>
     <hint type="destinationlabel">
      <x>261</x>
      <y>130</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>listChatters</sender>
+   <signal>clicked(QModelIndex)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>chatter_selected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>232</x>
+     <y>289</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>132</x>
+     <y>293</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clearButton</sender>
+   <signal>clicked()</signal>
+   <receiver>listMessages</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>62</x>
+     <y>425</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>118</x>
+     <y>375</y>
     </hint>
    </hints>
   </connection>
@@ -252,5 +297,6 @@
   <slot>send_message()</slot>
   <slot>connect_server()</slot>
   <slot>disconnect_server()</slot>
+  <slot>chatter_selected()</slot>
  </slots>
 </ui>

@@ -4,6 +4,7 @@ import socket
 import selectors
 import traceback
 from PyQt5 import QtWidgets, QtCore
+from PyQt5.Qt import Qt
 
 import libclient
 import ChatClientGui
@@ -18,6 +19,7 @@ class ChatClientWindow(QtWidgets.QMainWindow):
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.monitor_selector)
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.selectedChatter = None
 
     def connect_server(self):
         global gsock, message
@@ -40,9 +42,13 @@ class ChatClientWindow(QtWidgets.QMainWindow):
 
     def send_message(self):
         global message
-        action = "send"
-        value = ui_window.messageEdit.toPlainText()
-        message.request = create_request(action, value)
+        if self.selectedChatter is None:
+            action = "send"
+        else:
+            action = "peer2Peer"
+        value = ui_window.lineEdit_3.text() + ": "
+        value += ui_window.messageEdit.toPlainText()
+        message.request = create_request(action, value, self.selectedChatter)
         message.ready_to_send = True
         message.set_selector_events_mask("w")
         ui_window.messageEdit.clear()
@@ -73,15 +79,54 @@ class ChatClientWindow(QtWidgets.QMainWindow):
     def display_chatters(self, chatters):
         ui_window.listChatters.clear()
         for chatter in chatters:
-            ui_window.listChatters.addItem(chatter)
+            if chatter != ui_window.lineEdit_3.text():
+                ui_window.listChatters.addItem(chatter)
+
+    # gets the selected chatter from list.
+    # if the chatter has been selected before chatter will be set to none.
+    # if the selected chatter the chatter itself it is ignored
+    def chatter_selected(self):
+        index = ui_window.listChatters.currentRow()
+        item = ui_window.listChatters.item(index)
+        text = item.text()
+        if self.selectedChatter is None:
+            if text != ui_window.lineEdit_3.text():
+                self.selectedChatter = text
+            else:
+                self.redo_selection()
+        else:
+            if text == self.selectedChatter:
+                self.selectedChatter = None
+                ui_window.listChatters.setCurrentRow(-1)
+            else:
+                if text != ui_window.lineEdit_3.text():
+                    self.selectedChatter = text
+                else:
+                    self.redo_selection()
+        if self.selectedChatter is not None:
+            print("selected chatter: " + self.selectedChatter)
+        else:
+            print("broadcast is selected")
+
+    def redo_selection(self):
+        chatter = self.selectedChatter
+        if chatter is not None:
+            items = ui_window.listChatters.findItems(chatter, Qt.MatchExactly)
+            ui_window.listChatters.setCurrentItem(items[0])
 
 
-def create_request(action, value):
-    if action in ("send", "login", "logout", "peer2peer", "disconnect"):
+def create_request(action, value, receiver=None):
+    if action in ("send", "login", "logout", "disconnect"):
         return dict(
             type="text/json",
             encoding="utf-8",
             content=dict(action=action, value=value),
+        )
+    elif action == "peer2Peer":
+        return dict(
+            type="text/json",
+            encoding="utf-8",
+            content=dict(action=action, value=value, user=receiver),
         )
     else:
         return dict(
