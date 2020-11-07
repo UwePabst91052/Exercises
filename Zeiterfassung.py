@@ -6,12 +6,14 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+RECENT_FILES_MAX = 5
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Workpackage import *
 from ReadWorkpackes import *
 from StoreWorkpackages import *
 import Zeitraum as ts
+import AddWorkday as awd
 import datetime as dt
 from BerichtAnzeigen import display_report
 from BerichtAusdrucken import create_work_dictionary
@@ -21,6 +23,7 @@ from BerichtAusdrucken import report_workday_summary
 from BerichtAusdrucken import report_workpackage_summary
 import os
 
+DATA_FILE_PATH = "./Dateien/RecentFiles.txt"
 
 class OverviewSection(QtWidgets.QWidget):
     def __init__(self, parent):
@@ -151,7 +154,7 @@ class WorkpackageSection(QtWidgets.QWidget):
 class DateSection(QtWidgets.QWidget):
     def __init__(self, parent):
         super().__init__(parent)
-        self.setGeometry(QtCore.QRect(10, 300, 231, 56))
+        self.setGeometry(QtCore.QRect(10, 300, 331, 56))
         self.setObjectName("layoutWidget_2")
         self.gridLayout_3 = QtWidgets.QGridLayout(self)
         self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -170,10 +173,16 @@ class DateSection(QtWidgets.QWidget):
         self.button_start_stop.setObjectName("button_start_stop")
         self.button_start_stop.clicked[bool].connect(self.on_click_start_stop)
         self.gridLayout_3.addWidget(self.button_start_stop, 1, 1, 1, 1)
+        self.button_add_day = QtWidgets.QPushButton(self)
+        self.button_add_day.setObjectName("button_add_day")
+        self.button_add_day.clicked.connect(self.on_click_add_workday)
+        self.gridLayout_3.addWidget(self.button_add_day, 1, 2, 1, 1)
         self.label_3.setText("Anzeigedatum")
         self.button_start_stop.setText("Beginn")
+        self.button_add_day.setText("Hinzufügen")
 
     def on_click_start_stop(self, pressed):
+        global wt_index
         if wp_index < 0:
             return
         wp = workpackages[wp_index]
@@ -190,10 +199,23 @@ class DateSection(QtWidgets.QWidget):
             date = self.get_current_date()
             wp.add_workday(date)
             wp.begin_working(time)
+            wt_index = -1
             ex.layoutOverview.update_times(wp_index, start=time)
             ex.layoutChanging.set_starttime(time)
             ex.layoutChanging.set_endtime("00:00", "")
             self.button_start_stop.setText("Ende")
+
+    def on_click_add_workday(self):
+        dialog = QtWidgets.QDialog()
+        ui_dialog = awd.Ui_Dialog()
+        ui_dialog.setupUi(dialog)
+        dialog.exec_()
+        date = ui_dialog.calendarWidget.selectedDate().toString("dd.MM.yyyy")
+        if wp_index >= 0:
+            wp = workpackages[wp_index]
+            wp.add_workday(date)
+            create_date_list(wp.workdays)
+            self.add_workdays()
 
     def add_workdays(self):
         self.cb_workdays.clear()
@@ -395,11 +417,14 @@ class ChangingSection(QtWidgets.QGroupBox):
         date = ex.layoutDate.get_current_date()
         wt = None
         wp = None
-        if wp_index >= 0 and wt_index >= 0:
+        if wp_index >= 0:
             wp = workpackages[wp_index]
             for wd in wp.workdays:
                 if wd.date == date:
-                    wt = wd.worktimes[wt_index]
+                    if wt_index >= 0:
+                        wt = wd.worktimes[wt_index]
+                    else:
+                        wt = wd.cur_worktime
         if wt is not None:
             start = self.edit_starttime.time().toString(QtCore.Qt.TextDate)
             if start != wt.start_time:
@@ -407,9 +432,12 @@ class ChangingSection(QtWidgets.QGroupBox):
             end = self.edit_endtime.time().toString(QtCore.Qt.TextDate)
             if end != wt.end_time:
                 wt.set_end_time(end)
-            ex.layoutOverview.update_wp_overview(date)
-            ex.layoutWorktimes.add_worktimes(date, wp)
-            self.update_times(date, wp)
+            if end != '00:00:00':
+                ex.layoutOverview.update_wp_overview(date)
+                ex.layoutWorktimes.add_worktimes(date, wp)
+                ex.layoutChanging.update_times(date, wp)
+            else:
+                ex.layoutOverview.update_times(wp_index, start=start)
 
     def on_click_delete(self):
         date = ex.layoutDate.get_current_date()
@@ -449,6 +477,10 @@ class UiMainWindow(QtWidgets.QMainWindow):
         self.menu_bar.setGeometry(QtCore.QRect(0, 0, 658, 21))
         self.menu_bar.setObjectName("menu_bar")
 
+        self.recent_files_actions = [self.open_recent_file0, self.open_recent_file1,
+                                     self.open_recent_file2, self.open_recent_file3,
+                                     self.open_recent_file4]
+        self.recent_files = read_recent_files()
         self.action_new = QtWidgets.QAction("Neu", self)
         self.action_new.triggered.connect(new_file)
         self.actionOpen = QtWidgets.QAction("Öffnen...", self)
@@ -457,10 +489,18 @@ class UiMainWindow(QtWidgets.QMainWindow):
         self.actionSave.triggered.connect(save_file)
         self.actionSaveAs = QtWidgets.QAction("Speichern unter...")
         self.actionSaveAs.triggered.connect(save_file_as)
+        self.menuRecentFiles = QtWidgets.QMenu("Zuletzt verwendet", self)
         self.menuFile.addAction(self.action_new)
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionSaveAs)
+        self.menuFile.addSeparator()
+        index = 0
+        for path, base in self.recent_files:
+            recent_action = QtWidgets.QAction(base, self)
+            recent_action.triggered.connect(self.recent_files_actions[index])
+            self.menuFile.addAction(recent_action)
+            index += 1
         self.menu_bar.addAction(self.menuFile.menuAction())
 
         self.action_proof_of_time = QtWidgets.QAction("Zeitnachweis", self)
@@ -483,6 +523,26 @@ class UiMainWindow(QtWidgets.QMainWindow):
 
         QtCore.QMetaObject.connectSlotsByName(self)
 
+    def open_recent_file0(self):
+        self.open_recent_file(0)
+
+    def open_recent_file1(self):
+        self.open_recent_file(1)
+
+    def open_recent_file2(self):
+        self.open_recent_file(2)
+
+    def open_recent_file3(self):
+        self.open_recent_file(3)
+
+    def open_recent_file4(self):
+        self.open_recent_file(4)
+
+    def open_recent_file(self, index):
+        path, base = self.recent_files[index]
+        file_name = path + '/' + base
+        open_data_file(file_name)
+
 
 class ExampleApp(UiMainWindow):
     def __init__(self, parent=None):
@@ -503,13 +563,21 @@ def new_file():
 
 
 def open_file():
+    global filename
+    file_name = QtWidgets.QFileDialog.getOpenFileName(ex, "Öffne Datei", ".\Dateien", "XML Dateien (*.xml)")[0]
+    open_data_file(file_name)
+
+
+def open_data_file(file_name):
     global filename, workpackages
     if len(workpackages) > 0:
         new_file()
-    filename = QtWidgets.QFileDialog.getOpenFileName(ex, "Öffne Datei", ".\Dateien", "XML Dateien (*.xml)")[0]
+    filename = file_name
     file = open(filename, 'r', encoding='utf-8')
     workpackages = read_workpackages(file)
     file.close()
+    # add to recent file list
+    add_recent_files(filename)
     filename_base = os.path.basename(filename)
     ex.setWindowTitle("Zeitnachweis - " + filename_base)
     for wp in workpackages:
@@ -609,6 +677,40 @@ def get_daily_worktime(date_str):
     for wp in workpackages:
         daily_duration += wp.get_wpckg_duration_for_date(date_str)
     return Time.convert_seconds_to_time_string(daily_duration)
+
+
+def add_recent_files(file_name):
+    if os.path.exists(DATA_FILE_PATH):
+        file = open(DATA_FILE_PATH, 'r', encoding='windows-1252')
+        path_list = file.readlines()
+        # compare with new filename
+        duplicate = False
+        for path in path_list:
+            base_name = os.path.basename(file_name)
+            duplicate |= path.find(base_name) >= 0
+        if not duplicate and len(path_list) < RECENT_FILES_MAX:
+            file.close()
+            file = open(DATA_FILE_PATH, 'a', encoding='windows-1252')
+            file.write(filename + '\n')
+    else:
+        # create data file
+        file = open(DATA_FILE_PATH, 'x', encoding='windows-1252')
+        file.write(file_name + '\n')
+
+    file.close()
+
+
+def read_recent_files():
+    file_list = []
+    if os.path.exists(DATA_FILE_PATH):
+        file = open(DATA_FILE_PATH, 'r', encoding='windows-1252')
+        path_list = file.readlines()
+        for path in path_list:
+            dirname = os.path.dirname(path)
+            basename = os.path.basename(path).rstrip()
+            if len(file_list) < RECENT_FILES_MAX:
+                file_list.append((dirname, basename))
+    return file_list
 
 
 workpackages = []
