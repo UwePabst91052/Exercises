@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(235, 144)
+        MainWindow.resize(235, 190)
         MainWindow.setWindowTitle("Tee Uhr")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -47,8 +47,14 @@ class Ui_MainWindow(object):
         self.pb_dec_minute.setGeometry(QtCore.QRect(30, 50, 21, 23))
         self.pb_dec_minute.setObjectName("pb_dec_minute")
         self.pb_start_timer = QtWidgets.QPushButton(self.centralwidget)
-        self.pb_start_timer.setGeometry(QtCore.QRect(80, 80, 75, 23))
+        self.pb_start_timer.setGeometry(QtCore.QRect(70, 120, 75, 23))
         self.pb_start_timer.setObjectName("pb_start_timer")
+        self.pb_seven = QtWidgets.QPushButton(self.centralwidget)
+        self.pb_seven.setGeometry(QtCore.QRect(20, 90, 75, 23))
+        self.pb_seven.setObjectName("pb_seven")
+        self.pb_three = QtWidgets.QPushButton(self.centralwidget)
+        self.pb_three.setGeometry(QtCore.QRect(130, 90, 75, 23))
+        self.pb_three.setObjectName("pb_three")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 235, 21))
@@ -64,6 +70,8 @@ class Ui_MainWindow(object):
         self.pb_inc_seconds.clicked.connect(MainWindow.increment_seconds)
         self.pb_dec_seconds.clicked.connect(MainWindow.decrement_seconds)
         self.pb_start_timer.clicked.connect(MainWindow.start_timer)
+        self.pb_seven.clicked.connect(MainWindow.start_seven_minutes)
+        self.pb_three.clicked.connect(MainWindow.start_three_minutes)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -73,6 +81,8 @@ class Ui_MainWindow(object):
         self.pb_inc_minute.setText(_translate("MainWindow", "+"))
         self.pb_dec_minute.setText(_translate("MainWindow", "-"))
         self.pb_start_timer.setText(_translate("MainWindow", "Start"))
+        self.pb_seven.setText(_translate("MainWindow", "7 min"))
+        self.pb_three.setText(_translate("MainWindow", "3 min"))
 
 
 if __name__ == "__main__":

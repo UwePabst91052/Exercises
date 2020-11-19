@@ -50,6 +50,16 @@ class ExampleApp(QMainWindow):
     def start_timer(self):
         self.timer.start(1000)
 
+    def start_seven_minutes(self):
+        self.raw_time = 420
+        self.display_time()
+        self.timer.start(1000)
+
+    def start_three_minutes(self):
+        self.raw_time = 180
+        self.display_time()
+        self.timer.start(1000)
+
 
 app = QApplication([])
 ui_window = TeeUhr.Ui_MainWindow()
