@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(235, 190)
+        MainWindow.resize(235, 217)
         MainWindow.setWindowTitle("Tee Uhr")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -47,7 +47,7 @@ class Ui_MainWindow(object):
         self.pb_dec_minute.setGeometry(QtCore.QRect(30, 50, 21, 23))
         self.pb_dec_minute.setObjectName("pb_dec_minute")
         self.pb_start_timer = QtWidgets.QPushButton(self.centralwidget)
-        self.pb_start_timer.setGeometry(QtCore.QRect(70, 120, 75, 23))
+        self.pb_start_timer.setGeometry(QtCore.QRect(70, 150, 75, 23))
         self.pb_start_timer.setObjectName("pb_start_timer")
         self.pb_seven = QtWidgets.QPushButton(self.centralwidget)
         self.pb_seven.setGeometry(QtCore.QRect(20, 90, 75, 23))
@@ -55,6 +55,12 @@ class Ui_MainWindow(object):
         self.pb_three = QtWidgets.QPushButton(self.centralwidget)
         self.pb_three.setGeometry(QtCore.QRect(130, 90, 75, 23))
         self.pb_three.setObjectName("pb_three")
+        self.pb_five = QtWidgets.QPushButton(self.centralwidget)
+        self.pb_five.setGeometry(QtCore.QRect(20, 120, 75, 23))
+        self.pb_five.setObjectName("pb_five")
+        self.pb_six_30 = QtWidgets.QPushButton(self.centralwidget)
+        self.pb_six_30.setGeometry(QtCore.QRect(130, 120, 75, 23))
+        self.pb_six_30.setObjectName("pb_six_30")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 235, 21))
@@ -72,6 +78,8 @@ class Ui_MainWindow(object):
         self.pb_start_timer.clicked.connect(MainWindow.start_timer)
         self.pb_seven.clicked.connect(MainWindow.start_seven_minutes)
         self.pb_three.clicked.connect(MainWindow.start_three_minutes)
+        self.pb_five.clicked.connect(MainWindow.start_five_minutes)
+        self.pb_six_30.clicked.connect(MainWindow.start_six_thirty_minutes)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -83,6 +91,8 @@ class Ui_MainWindow(object):
         self.pb_start_timer.setText(_translate("MainWindow", "Start"))
         self.pb_seven.setText(_translate("MainWindow", "7 min"))
         self.pb_three.setText(_translate("MainWindow", "3 min"))
+        self.pb_five.setText(_translate("MainWindow", "5 min"))
+        self.pb_six_30.setText(_translate("MainWindow", "6:30 min"))
 
 
 if __name__ == "__main__":

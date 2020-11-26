@@ -47,18 +47,23 @@ class ExampleApp(QMainWindow):
             self.raw_time -= 10
         self.display_time()
 
-    def start_timer(self):
+    def start_timer(self, time=0):
+        if time > 0:
+            self.raw_time = time
+            self.display_time()
         self.timer.start(1000)
 
     def start_seven_minutes(self):
-        self.raw_time = 420
-        self.display_time()
-        self.timer.start(1000)
+        self.start_timer(420)
 
     def start_three_minutes(self):
-        self.raw_time = 180
-        self.display_time()
-        self.timer.start(1000)
+        self.start_timer(180)
+
+    def start_five_minutes(self):
+        self.start_timer(300)
+
+    def start_six_thirty_minutes(self):
+        self.start_timer(390)
 
 
 app = QApplication([])

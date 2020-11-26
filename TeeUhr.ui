@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>235</width>
+    <height>217</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string notr="true">Tee Uhr</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>10</y>
+      <width>131</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Impact</family>
+      <pointsize>30</pointsize>
+      <italic>false</italic>
+      <kerning>true</kerning>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::WinPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Sunken</enum>
+    </property>
+    <property name="lineWidth">
+     <number>3</number>
+    </property>
+    <property name="midLineWidth">
+     <number>0</number>
+    </property>
+    <property name="text">
+     <string notr="true">00:00</string>
+    </property>
+    <property name="scaledContents">
+     <bool>false</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="margin">
+     <number>11</number>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_inc_seconds">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>10</y>
+      <width>21</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>+</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_dec_seconds">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>50</y>
+      <width>21</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>-</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_inc_minute">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>10</y>
+      <width>21</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>+</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_dec_minute">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>50</y>
+      <width>21</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>-</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_start_timer">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>150</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Start</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_seven">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>90</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>7 min</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_three">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>90</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>3 min</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_five">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>120</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>5 min</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_six_30">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>120</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>6:30 min</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>235</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pb_inc_minute</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>increment_minutes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>41</x>
+     <y>46</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>70</x>
+     <y>106</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_dec_minute</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>decrement_minutes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>38</x>
+     <y>82</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>35</x>
+     <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_inc_seconds</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>increment_seconds()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>196</x>
+     <y>46</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>214</x>
+     <y>50</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_dec_seconds</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>decrement_seconds()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>187</x>
+     <y>81</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>211</x>
+     <y>97</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_start_timer</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>start_timer()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>105</x>
+     <y>193</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>166</x>
+     <y>119</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_seven</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>start_seven_minutes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>52</x>
+     <y>122</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>30</x>
+     <y>145</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_three</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>start_three_minutes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>192</x>
+     <y>128</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>195</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_five</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>start_five_minutes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>66</x>
+     <y>153</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>51</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_six_30</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>start_six_thirty_minutes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>158</x>
+     <y>150</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>159</x>
+     <y>172</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>increment_minutes()</slot>
+  <slot>increment_seconds()</slot>
+  <slot>decrement_minutes()</slot>
+  <slot>decrement_seconds()</slot>
+  <slot>start_timer()</slot>
+  <slot>start_seven_minutes()</slot>
+  <slot>start_three_minutes()</slot>
+  <slot>start_five_minutes()</slot>
+  <slot>start_six_thirty_minutes()</slot>
+ </slots>
+</ui>
