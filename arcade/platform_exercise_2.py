@@ -151,7 +151,7 @@ class MyGame(arcade.Window):
         # and set them to None
         self.player_sprite = None
         self.jump_sound = arcade.load_sound("./resources/Sounds/jump1.wav")
-        self.box_list = None
+        self.floor_list = None
         self.moving_wall_list = None
         self.all_tiles_list = None
         self.physics_engine = None
@@ -169,35 +169,41 @@ class MyGame(arcade.Window):
     def setup(self):
         """ Set up the game variables. Call to re-start the game. """
         # Create your sprites and sprite lists here
-        self.box_list = arcade.SpriteList()
+        self.floor_list = arcade.SpriteList()
         self.moving_wall_list = arcade.SpriteList()
         self.all_tiles_list = arcade.SpriteList()
 
+        # set map layer names
+        map_name = f"{self.map_path}platform_exercise.tmx"
+        floor_layer_name = "floor"
+        platform_layer_name = "platforms"
+
+        # Read in the tiled map
+        my_map = arcade.tilemap.read_tmx(map_name)
+
         # Create floor
-        for x in range(32 - 5 * GRID_PIXEL_SIZE, 32 + 15 * GRID_PIXEL_SIZE, GRID_PIXEL_SIZE):
-            box = arcade.Sprite("./resources/images/tiles/boxCrate.png", SPRITE_SCALING)
-            box.center_x = x
-            box.center_y = GRID_PIXEL_SIZE // 2
-            self.box_list.append(box)
-            self.all_tiles_list.append(box)
+        self.floor_list = arcade.tilemap.process_layer(map_object=my_map,
+                                                       layer_name=floor_layer_name,
+                                                       scaling=SPRITE_SCALING,
+                                                       use_spatial_hash=True)
+        for item in self.floor_list:
+            self.all_tiles_list.append(item)
 
         # set up player
         self.player_sprite = Player()
         self.player_sprite.center_x = 4 * GRID_PIXEL_SIZE
         self.player_sprite.center_y = 3 * GRID_PIXEL_SIZE
 
-        # set platforms
-        y = 2
-        for x in range(-1, 10, 2):
-            wall = arcade.Sprite("./resources/images/tiles/bridgeB.png", SPRITE_SCALING)
-            wall.center_x = x * GRID_PIXEL_SIZE
-            wall.center_y = y * GRID_PIXEL_SIZE
-            wall.boundary_left = -2 * GRID_PIXEL_SIZE
-            wall.boundary_right = 15 * GRID_PIXEL_SIZE
-            wall.change_x = 2 * SPRITE_SCALING
-            self.moving_wall_list.append(wall)
-            self.all_tiles_list.append(wall)
-            y += 0
+        # -- moving platforms
+        self.moving_wall_list = arcade.tilemap.process_layer(map_object=my_map,
+                                                             layer_name=platform_layer_name,
+                                                             scaling=SPRITE_SCALING,
+                                                             use_spatial_hash=True)
+        for tile in self.moving_wall_list:
+            tile.boundary_left = 6 * GRID_PIXEL_SIZE
+            tile.boundary_right = 14 * GRID_PIXEL_SIZE
+            tile.change_x = 2
+            self.all_tiles_list.append(tile)
 
         self.physics_engine = arcade.PhysicsEnginePlatformer(self.player_sprite,
                                                              self.all_tiles_list,
