@@ -118,6 +118,7 @@ class OverviewSection(QtWidgets.QWidget):
             else:
                 ex.layoutOverview.update_times(row)
             row += 1
+        self.show_daily_worktime(get_daily_worktime(date))
 
 
 class WorkpackageSection(QtWidgets.QWidget):
@@ -195,11 +196,15 @@ class DateSection(QtWidgets.QWidget):
             ex.layoutWorktimes.add_worktime(times[0], times[1], times[2])
             ex.layoutChanging.set_endtime(times[1], times[2])
             self.button_start_stop.setText("Beginn")
+            date = self.get_current_date()
+            ex.layoutOverview.show_daily_worktime(get_daily_worktime(date))
         else:
             date = self.get_current_date()
             wp.add_workday(date)
             wp.begin_working(time)
             wt_index = -1
+            time = wp.cur_workday.cur_worktime.start_time
+            time = str(time)
             ex.layoutOverview.update_times(wp_index, start=time)
             ex.layoutChanging.set_starttime(time)
             ex.layoutChanging.set_endtime("00:00", "")
@@ -210,10 +215,10 @@ class DateSection(QtWidgets.QWidget):
         ui_dialog = awd.Ui_Dialog()
         ui_dialog.setupUi(dialog)
         dialog.exec_()
-        date = ui_dialog.calendarWidget.selectedDate().toString("dd.MM.yyyy")
+        new_date = ui_dialog.calendarWidget.selectedDate().toString("dd.MM.yyyy")
         if wp_index >= 0:
             wp = workpackages[wp_index]
-            wp.add_workday(date)
+            wp.add_workday(new_date)
             create_date_list(wp.workdays)
             self.add_workdays()
 
@@ -323,7 +328,7 @@ class ChangingSection(QtWidgets.QGroupBox):
         self.gridLayout.setObjectName("gridLayout")
         self.edit_starttime = QtWidgets.QTimeEdit(self)
         self.edit_starttime.setObjectName("edit_starttime")
-        self.edit_starttime.setDisplayFormat("HH:mm:ss")
+        self.edit_starttime.setDisplayFormat("HH:mm")
         self.gridLayout.addWidget(self.edit_starttime, 1, 0, 1, 1)
         self.label_6 = QtWidgets.QLabel(self)
         self.label_6.setObjectName("label_6")
@@ -354,7 +359,7 @@ class ChangingSection(QtWidgets.QGroupBox):
         self.gridLayout.addWidget(self.label_7, 0, 2, 1, 1)
         self.edit_endtime = QtWidgets.QTimeEdit(self)
         self.edit_endtime.setObjectName("edit_endtime")
-        self.edit_endtime.setDisplayFormat("HH:mm:ss")
+        self.edit_endtime.setDisplayFormat("HH:mm")
         self.gridLayout.addWidget(self.edit_endtime, 1, 1, 1, 1)
         self.button_delete = QtWidgets.QPushButton(self)
         self.button_delete.clicked.connect(self.on_click_delete)
@@ -437,7 +442,7 @@ class ChangingSection(QtWidgets.QGroupBox):
                 ex.layoutWorktimes.add_worktimes(date, wp)
                 ex.layoutChanging.update_times(date, wp)
             else:
-                ex.layoutOverview.update_times(wp_index, start=start)
+                ex.layoutOverview.update_times(wp_index, start=str(wt.start_time))
 
     def on_click_delete(self):
         date = ex.layoutDate.get_current_date()
