@@ -1,0 +1,28 @@
+<Workpackage>
+  <Name>asdfasdfasfd</Name>
+  <Count>1</Count>
+  <Workdays>
+    <Date>13.04.2020</Date>
+    <Count>2</Count>
+    <Worktimes>
+      <Begin>08:34:00</Begin>
+      <End>09:23:00</End>
+      <Begin>10:34:00</Begin>
+      <End>11:23:00</End>
+    </Worktimes>
+  </Workdays>
+</Workpackage>
+<Workpackage>
+  <Name>zedfghfghsfhsfh</Name>
+  <Count>1</Count>
+  <Workdays>
+    <Date>13.04.2020</Date>
+    <Count>2</Count>
+    <Worktimes>
+      <Begin>06:33:11</Begin>
+      <End>08:34:07</End>
+      <Begin>09:33:11</Begin>
+      <End>10:34:07</End>
+    </Worktimes>
+  </Workdays>
+</Workpackage>

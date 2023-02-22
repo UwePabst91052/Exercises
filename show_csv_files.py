@@ -49,7 +49,7 @@ class ShowCsvContent(QMainWindow):
         for header in self.headline:
             item = QTableWidgetItem(header.strip('\"'))
             ui_window.tableWidget.setHorizontalHeaderItem(col, item)
-            if col in (2, 6, 7, 10):
+            if col in (2, 6, 7):
                 ui_window.tableWidget.setColumnHidden(col, True)
             if col == 3:
                 ui_window.tableWidget.setColumnWidth(col, 150)
@@ -57,6 +57,8 @@ class ShowCsvContent(QMainWindow):
                 ui_window.tableWidget.setColumnWidth(col, 250)
             elif col == 5:
                 ui_window.tableWidget.setColumnWidth(col, 200)
+            elif col == 10:
+                ui_window.tableWidget.setColumnWidth(col, 150)
             col += 1
 
     def fill_data(self):

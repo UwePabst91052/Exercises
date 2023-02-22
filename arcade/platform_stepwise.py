@@ -1,22 +1,28 @@
 """
-Starting Template
+Platform Exercise
 
-Once you have learned how to use classes, you can begin your program with this
-template.
+I will develop a platform game step by step.
 
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.starting_template
+Step 1: position a player on the floor
+Step 2: enable the player to walk left and right
+Step 3: enable player to jump
+Step 4: animate the player. Therefore use a player class
+Step 5: Add static platform
+Step 6: Move platform
+Step 7: Load static platform from map
+
 """
 import arcade
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-SCREEN_TITLE = "My Platform Exercise 2"
 SPRITE_SCALING = 0.5
 PLAYER_SCALING = 0.7
 GRID_PIXEL_SIZE = 64
+SCREEN_WIDTH = 1200
+SCREEN_HEIGHT = 640
+SCREEN_TITLE = "Platform Exercise"
 MAX_SPEED = 5.0
 JUMP_SPEED = 12
+ACCELERATION_RATE = 0.1
 GRAVITY = 0.5
 # Constants used to track if the player is facing left or right
 RIGHT_FACING = 0
@@ -27,7 +33,7 @@ UPDATES_PER_FRAME = 7
 # and the edge of the screen.
 LEFT_VIEWPORT_MARGIN = 250
 RIGHT_VIEWPORT_MARGIN = 250
-BOTTOM_VIEWPORT_MARGIN = 64
+BOTTOM_VIEWPORT_MARGIN = 100
 TOP_VIEWPORT_MARGIN = 100
 
 
@@ -144,61 +150,28 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.color.AMAZON)
 
-        # tile paths
-        grass_mid = ":resources:images/tiles/grassMid.png"
-        grass_center = ":resources:images/tiles/grassCenter.png"
-        grass_corner_left = ":resources:images/tiles/grassCorner_left.png"
-        grass_corner_right = ":resources:images/tiles/grassCorner_right.png"
-        grass_hill_left = ":resources:images/tiles/grassHill_left.png"
-        grass_hill_right = ":resources:images/tiles/grassHill_right.png"
-        # grass_ = ":resources:images/tiles/"
-
-        # init floor tile list
-        # 0  1  2   3   4   5   6   7   8   9   10  11  12  13  14  15  16   17   18   19
-        # 32 96 160 224 288 352 416 480 544 608 672 736 800 864 928 992 1056 1120 1184 1248
-        self.floor_line_3 = [(224, 160, grass_hill_right),
-                             (288, 160, grass_mid),
-                             (352, 160, grass_mid),
-                             (928, 160, grass_mid),
-                             (992, 160, grass_mid),
-                             (1056, 160, grass_hill_left)]
-        self.floor_line_2 = [(160, 96, grass_hill_right),
-                             (224, 96, grass_corner_right),
-                             (288, 96, grass_center),
-                             (352, 96, grass_center),
-                             (928, 96, grass_center),
-                             (992, 96, grass_center),
-                             (1056, 96, grass_corner_left),
-                             (1120, 96, grass_hill_left)]
-        self.floor_line_1 = [(32, 32, grass_mid),
-                             (96, 32, grass_mid),
-                             (160, 32, grass_corner_right),
-                             (224, 32, grass_center),
-                             (288, 32, grass_center),
-                             (352, 32, grass_center),
-                             (416, 32, grass_mid),
-                             (480, 32, grass_mid),
-                             (544, 32, grass_mid),
-                             (608, 32, grass_mid),
-                             (672, 32, grass_mid),
-                             (736, 32, grass_mid),
-                             (800, 32, grass_mid),
-                             (864, 32, grass_mid),
-                             (928, 32, grass_center),
-                             (992, 32, grass_center),
-                             (1056, 32, grass_center),
-                             (1120, 32, grass_corner_left),
-                             (1184, 32, grass_mid),
-                             (1248, 32, grass_mid)]
+        # path to tiles sprites
+        self.tile_path = "./resources/images/tiles/"
+        self.map_path = "./resources/maps/"
+        self.sound_path = ":resources:sounds/"
 
         # If you have sprite lists, you should create them here,
         # and set them to None
+        self.all_sprites_list = None
+        self.player_list = None
+        self.floor_list = None
+        self.coin_list = None
+        self.ladder_list = None
+        self.background_list = None
+        self.foreground_list = None
+        self.moving1_list = None
+        self.platform_list = None
         self.player_sprite = None
-        self.jump_sound = arcade.load_sound("./resources/Sounds/jump1.wav")
-        self.box_list = None
-        self.moving_wall_list = None
-        self.all_tiles_list = None
         self.physics_engine = None
+
+        # Used to keep track of our scrolling
+        self.view_bottom = 0
+        self.view_left = 0
 
         self.left_pressed = False
         self.right_pressed = False
@@ -206,52 +179,81 @@ class MyGame(arcade.Window):
         self.down_pressed = False
         self.jump_needs_reset = False
 
-        # Used to keep track of our scrolling
-        self.view_bottom = 0
-        self.view_left = 0
-
-        # horizontal speed before and after physics engine
-        self.speed_before = 0
-        self.speed_after = 0
-
-    def setup_floor(self, floor_line):
-        for line in floor_line:
-            tile = arcade.Sprite(line[2], SPRITE_SCALING)
-            tile.center_x = line[0]
-            tile.center_y = line[1]
-            self.box_list.append(tile)
-            self.all_tiles_list.append(tile)
+        # Load sounds
+        self.collect_coin_sound = arcade.load_sound(f"{self.sound_path}coin1.wav")
+        self.jump_sound = arcade.load_sound(f"{self.sound_path}jump1.wav")
 
     def setup(self):
         """ Set up the game variables. Call to re-start the game. """
         # Create your sprites and sprite lists here
-        self.box_list = arcade.SpriteList()
-        self.moving_wall_list = arcade.SpriteList()
-        self.all_tiles_list = arcade.SpriteList()
+        self.all_sprites_list = arcade.SpriteList()
+        self.player_list = arcade.SpriteList()
+        self.floor_list = arcade.SpriteList()
+        self.platform_list = arcade.SpriteList()
+
+        # Create player
+        self.player_sprite = Player()
+        self.player_sprite.left = 32 * GRID_PIXEL_SIZE
+        self.player_sprite.bottom = GRID_PIXEL_SIZE
+        self.player_list.append(self.player_sprite)
 
         # Create floor
-        self.setup_floor(self.floor_line_1)
-        self.setup_floor(self.floor_line_2)
-        # self.setup_floor(self.floor_line_3)
+        map_name = f"{self.map_path}map.tmx"
+        platform_layer_name = 'Platforms'
+        coin_layer_name = 'Coins'
+        back_layer_name = 'Background'
+        fore_layer_name = 'Foreground'
+        moving1_layer_name = 'Moving_1'
+        ladder_layer_name = "Ladders"
 
-        # set up player
-        self.player_sprite = Player()
-        self.player_sprite.center_x = 4 * GRID_PIXEL_SIZE
-        self.player_sprite.center_y = 3 * GRID_PIXEL_SIZE
+        # Read in the tiled map
+        my_map = arcade.tilemap.read_tmx(map_name)
 
-        # set platforms
-        wall = arcade.Sprite("./resources/images/tiles/bridgeB.png", SPRITE_SCALING)
-        wall.center_x = 6 * GRID_PIXEL_SIZE + 32
-        wall.center_y = 1 * GRID_PIXEL_SIZE + 32
-        wall.boundary_left = 6 * GRID_PIXEL_SIZE
-        wall.boundary_right = 14 * GRID_PIXEL_SIZE
-        wall.change_x = 2
-        self.moving_wall_list.append(wall)
-        self.all_tiles_list.append(wall)
+        # -- Platforms
+        self.floor_list = arcade.tilemap.process_layer(map_object=my_map,
+                                                       layer_name=platform_layer_name,
+                                                       scaling=SPRITE_SCALING,
+                                                       use_spatial_hash=True)
+        for item in self.floor_list:
+            self.all_sprites_list.append(item)
 
+        # -- Coins
+        self.coin_list = arcade.tilemap.process_layer(map_object=my_map,
+                                                      layer_name=coin_layer_name,
+                                                      scaling=SPRITE_SCALING,
+                                                      use_spatial_hash=True)
+
+        # -- background objects
+        self.background_list = arcade.tilemap.process_layer(map_object=my_map,
+                                                            layer_name=back_layer_name,
+                                                            scaling=SPRITE_SCALING,
+                                                            use_spatial_hash=True)
+
+        # -- foreground objects
+        self.foreground_list = arcade.tilemap.process_layer(map_object=my_map,
+                                                            layer_name=fore_layer_name,
+                                                            scaling=SPRITE_SCALING,
+                                                            use_spatial_hash=True)
+
+        # -- moving platforms
+        self.moving1_list = arcade.tilemap.process_layer(map_object=my_map,
+                                                         layer_name=moving1_layer_name,
+                                                         scaling=SPRITE_SCALING,
+                                                         use_spatial_hash=True)
+        for tile in self.moving1_list:
+            self.all_sprites_list.append(tile)
+
+        # -- ladders
+        self.ladder_list = arcade.tilemap.process_layer(map_object=my_map,
+                                                        layer_name=ladder_layer_name,
+                                                        scaling=SPRITE_SCALING,
+                                                        use_spatial_hash=True)
+
+        # set up platform engine
         self.physics_engine = arcade.PhysicsEnginePlatformer(self.player_sprite,
-                                                             self.all_tiles_list,
-                                                             gravity_constant=GRAVITY)
+                                                             self.all_sprites_list,
+                                                             gravity_constant=GRAVITY,
+                                                             ladders=self.ladder_list)
 
     def on_draw(self):
         """
@@ -262,22 +264,28 @@ class MyGame(arcade.Window):
         # the screen to the background color, and erase what we drew last frame.
         arcade.start_render()
 
-        # draw background circles
-        # for x in range(-650, 1250, 100):
-        #    for y in range(114, 1014, 100):
-        #        arcade.draw_circle_outline(x, y, 50, arcade.color.AZURE, 5)
-
         # Call draw() on all your sprite lists below
-        self.player_sprite.draw()
-        self.all_tiles_list.draw()
+        self.background_list.draw()
+        self.ladder_list.draw()
+        self.player_list.draw()
+        self.foreground_list.draw()
+        self.coin_list.draw()
+        self.moving1_list.draw()
+        self.all_sprites_list.draw()
+
+        self.player_sprite.draw_hit_box()
+        for sprite in self.moving1_list:
+            sprite.draw_hit_box()
 
         # Draw text
         text_pos_x = self.view_left + 32
         text_pos_y = self.view_bottom + SCREEN_HEIGHT - 20
-        text_1 = f"speed_before: {self.speed_before:3.2f}"
-        text_2 = f"speed_after: {self.speed_after:3.2f}"
+        text_1 = f"change_x: {self.player_sprite.change_x:3.2f}"
+        text_2 = f"change_y: {self.player_sprite.change_y:3.2f}"
+        text_3 = self.player_sprite.move_mode_to_text()
         arcade.draw_text(text_1, text_pos_x, text_pos_y, arcade.color.BLACK)
         arcade.draw_text(text_2, text_pos_x, text_pos_y - 20, arcade.color.BLACK)
+        arcade.draw_text(text_3, text_pos_x, text_pos_y - 40, arcade.color.BLACK)
 
     def on_update(self, delta_time):
         """
@@ -285,9 +293,27 @@ class MyGame(arcade.Window):
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-        self.speed_before = self.player_sprite.change_x
+        # Update animations
+        self.player_sprite.can_jump = self.physics_engine.can_jump()
+
+        if self.physics_engine.is_on_ladder() and not self.physics_engine.can_jump():
+            self.player_sprite.is_on_ladder = True
+            self.process_key_change()
+        else:
+            self.player_sprite.is_on_ladder = False
+            self.process_key_change()
+
+        self.player_sprite.update()
+        self.player_sprite.update_animation()
+
+        # Move the player with the physics engine
         self.physics_engine.update()
-        self.speed_after = self.player_sprite.change_x
+
+        # collect coins
+        coin_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
+        for coin in coin_hit_list:
+            coin.remove_from_sprite_lists()
+            arcade.play_sound(self.collect_coin_sound)
 
         # Track if we need to change the viewport
 

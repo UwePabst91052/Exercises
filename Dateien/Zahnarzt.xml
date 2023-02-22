@@ -1,0 +1,18 @@
+<Zeiterfassung>
+  <Workpackage>
+    <Name>Zahnarzt</Name>
+    <Count>1</Count>
+    <Workdays>
+      <Date>13.03.2020</Date>
+      <Count>3</Count>
+      <Worktimes>
+        <Begin>08:03:00</Begin>
+        <End>12:00:00</End>
+        <Begin>12:45:00</Begin>
+        <End>13:25:00</End>
+        <Begin>16:12:00</Begin>
+        <End>18:12:00</End>
+      </Worktimes>
+    </Workdays>
+  </Workpackage>
+</Zeiterfassung>
