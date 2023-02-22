@@ -17,10 +17,12 @@ import AddWorkday as awd
 import datetime as dt
 from BerichtAnzeigen import display_report
 from BerichtAusdrucken import create_work_dictionary
+from BerichtAusdrucken import create_work_merged
 from BerichtAusdrucken import report_work_summary
 from BerichtAusdrucken import report_work_summary_timespan
 from BerichtAusdrucken import report_workday_summary
 from BerichtAusdrucken import report_workpackage_summary
+from BerichtAusdrucken import report_number_of_workdays
 import os
 
 DATA_FILE_PATH = "./Dateien/RecentFiles.txt"
@@ -516,10 +518,13 @@ class UiMainWindow(QtWidgets.QMainWindow):
         self.action_workday.triggered.connect(show_workday)
         self.action_balance = QtWidgets.QAction("Gleitzeitsaldo", self)
         self.action_balance.triggered.connect(show_balance)
+        self.action_count_days = QtWidgets.QAction("Anzahl Arbeitstage", self)
+        self.action_count_days.triggered.connect(show_num_workdays)
         self.menuReport.addAction(self.action_proof_of_time)
         self.menuReport.addAction(self.action_workpackage)
         self.menuReport.addAction(self.action_workday)
         self.menuReport.addAction(self.action_balance)
+        self.menuReport.addAction(self.action_count_days)
         self.menu_bar.addAction(self.menuReport.menuAction())
 
         self.setMenuBar(self.menu_bar)
@@ -635,14 +640,10 @@ def show_workday():
     report = report_workday_summary(date, workpackages)
     display_report(report)
 
-
-def show_balance():
-    keylist = create_work_dictionary(workpackages)
-    from_date = keylist[0]
-    date = Date(from_date)
+def input_timespan(min_date ,max_date):
+    date = Date(min_date)
     from_date = QtCore.QDate(date.year, date.month, date.day)
-    until_date = keylist[len(keylist) - 1]
-    date = Date(until_date)
+    date = Date(max_date)
     until_date = QtCore.QDate(date.year, date.month, date.day)
     dialog = QtWidgets.QDialog()
     ui_dialog = ts.Ui_Dialog()
@@ -652,9 +653,74 @@ def show_balance():
     dialog.exec_()
     from_date = ui_dialog.fromDate.date().toString("dd.MM.yyyy")
     until_date = ui_dialog.untilDate.date().toString("dd.MM.yyyy")
-    report = report_work_summary_timespan("Otto Normalverbraucher", workpackages, from_date, until_date)
+    return from_date, until_date
+
+def merge_wpckgs(workpackages):
+    mergedWorkpackages = []
+    mergedWorkpackages.append(Wp.Workpackage("Merged Workpackages"))
+
+    for wp in workpackages:
+        for wd in wp.workdays:
+            mergedWorkpackages[0].add_workday(str(wd.date))
+            for wt in wd.worktimes:
+                wt_strings = str(wt).split(" ", 3)
+                mergedWorkpackages[0].begin_working(wt_strings[0])
+                mergedWorkpackages[0].finish_working(wt_strings[1])
+    mergedWorkpackages[0].sort_workdays()
+    return mergedWorkpackages
+
+def show_balance():
+    workpackageMerged = merge_wpckgs(workpackages)
+    keylist = create_work_dictionary(workpackageMerged)
+    timespan = input_timespan(keylist[0],
+                              keylist[len(keylist) - 1])
+    report = report_work_summary_timespan("Otto Normalverbraucher", workpackages, timespan[0], timespan[1])
     display_report(report)
 
+def show_num_workdays():
+    keyList = create_work_dictionary(workpackages)
+    timespan = input_timespan(keyList[0],
+                              keyList[len(keyList) - 1])
+    keylist = create_work_merged(workpackages, timespan[0], timespan[1])
+    countOffice = 0
+    countHome = 0
+    countBoth = 0
+    evaluation_period = "Auswertungszeitraum vom {0} bis {1}".format(timespan[0], timespan[1])
+    for key in keylist.keys():
+        value = keylist[key]
+        if len(value) > 1:
+            result = check_real_worked(key, value[0], value[1])
+            if result[0]:
+                countBoth += 1
+            else:
+                if value[result[1]].wp_name == "Homeoffice":
+                    countHome += 1
+                else:
+                    countOffice += 1
+        else:
+            if value[0].wp_name == "Homeoffice":
+                countHome += 1
+            else:
+                countOffice += 1
+    report = report_number_of_workdays(keylist, countHome, countOffice, countBoth, evaluation_period)
+    display_report(report)
+
+def get_count_wt(date, wp):
+    for wd in wp.workdays:
+        if str(wd.date) == date:
+            return len(wd.worktimes)
+
+def check_real_worked(date, wp1, wp2):
+    countWtWp1 = get_count_wt(date, wp1)
+    countWtWp2 = get_count_wt(date, wp2)
+    if(countWtWp1 > 0 and countWtWp2 > 0):
+        return True, -1
+    else:
+        if countWtWp1 > 0:
+            index = 0
+        else:
+            index = 1
+        return False, index
 
 def get_worktimes_for_date(date, workpackage):
     wd_found = None
