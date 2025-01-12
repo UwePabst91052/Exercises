@@ -1,0 +1,11 @@
+{
+    "automappingRulesFile": "",
+    "commands": [
+    ],
+    "extensionsPath": "extensions",
+    "folders": [
+        "arcade",
+        "../../AppData/Local/Programs/Python/Python38-32/Lib/site-packages/arcade/resources"
+    ],
+    "objectTypesFile": ""
+}

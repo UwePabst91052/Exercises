@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../Development"
+		},
+		{
+			"path": "../site-packages"
+		},
+		{
+			"path": "../../AppData/Local/Programs/Python/Python38-32/Lib/site-packages"
+		}
+	],
+	"settings": {}
+}
