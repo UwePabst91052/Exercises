@@ -222,7 +222,9 @@ class DateSection(QtWidgets.QWidget):
         if wp_index >= 0:
             wp = workpackages[wp_index]
             wp.add_workday(new_date)
+            wp.sort_workdays()
             create_date_list(wp.workdays)
+            sort_date_list()
             self.add_workdays()
 
     def add_workdays(self):
