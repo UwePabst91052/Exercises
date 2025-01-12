@@ -608,6 +608,7 @@ def open_data_file(file_name):
     ex.setWindowTitle("Zeitnachweis - " + filename_base)
     for wp in workpackages:
         create_date_list(wp.workdays)
+    sort_date_list()
     ex.layoutDate.add_workdays()
     row = 0
     date = ex.layoutDate.get_current_date()
@@ -751,26 +752,22 @@ def get_worktimes_for_date(date, workpackage):
             wt_list.append(times)
     return wt_list
 
-def sort_date_list(date_list_str):
+def sort_date_list():
     date_list_obj = []
     for date in all_workdays:
         date_object = datetime.strptime(date, "%d.%m.%Y").date()
         date_list_obj.append(date_object)
     date_list_obj.sort()
-
-    date_list_str.clear()
-
+    all_workdays.clear()
     for date_object in date_list_obj:
         date = date_object.strftime("%d.%m.%Y")
-        date_list_str.append(date)
-    return date_list_str
+        all_workdays.append(date)
 
 def create_date_list(workdays):
     for wd in workdays:
         date = str(wd.date)
-        if (all_workdays.len() == 0) or (date not in all_workdays):
+        if date not in all_workdays:
             all_workdays.append(date)
-        all_workdays = sort_date_list(all_workdays)
 
 
 def get_daily_worktime(date_str):
