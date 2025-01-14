@@ -16,6 +16,7 @@ def main():
     wp.add_workday("03.03.2020")
     wp.add_workday("01.02.2020")
     wp.add_workday("04.02.2020")
+    wp.add_workday("29.02.2020")
     wp.add_workday("01.03.2020")
     wp.add_workday("02.03.2020")
     wp.add_workday("05.06.2020")
