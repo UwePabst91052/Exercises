@@ -1,6 +1,6 @@
 <Workpackage>
     <Name>Homeoffice</Name>
-    <Count>904</Count>
+    <Count>908</Count>
     <Workdays>
         <Date>23.04.2020</Date>
         <Count>2</Count>
@@ -7258,11 +7258,43 @@
         <Count>0</Count>
         <Worktimes>
         </Worktimes>
+        <Date>13.01.2025</Date>
+        <Count>2</Count>
+        <Worktimes>
+            <Begin>08:28</Begin>
+            <End>12:31</End>
+            <Begin>13:16</Begin>
+            <End>16:21</End>
+        </Worktimes>
+        <Date>03.07.2023</Date>
+        <Count>2</Count>
+        <Worktimes>
+            <Begin>08:02</Begin>
+            <End>12:15</End>
+            <Begin>13:00</Begin>
+            <End>16:49</End>
+        </Worktimes>
+        <Date>19.08.2024</Date>
+        <Count>2</Count>
+        <Worktimes>
+            <Begin>08:12</Begin>
+            <End>12:15</End>
+            <Begin>13:00</Begin>
+            <End>16:10</End>
+        </Worktimes>
+        <Date>20.08.2024</Date>
+        <Count>2</Count>
+        <Worktimes>
+            <Begin>08:15</Begin>
+            <End>12:20</End>
+            <Begin>13:05</Begin>
+            <End>15:52</End>
+        </Worktimes>
     </Workdays>
 </Workpackage>
 <Workpackage>
     <Name>Buero</Name>
-    <Count>223</Count>
+    <Count>226</Count>
     <Workdays>
         <Date>22.09.2022</Date>
         <Count>0</Count>
@@ -7811,12 +7843,8 @@
             <End>16:50</End>
         </Worktimes>
         <Date>03.07.2023</Date>
-        <Count>2</Count>
+        <Count>0</Count>
         <Worktimes>
-            <Begin>08:02</Begin>
-            <End>12:15</End>
-            <Begin>13:00</Begin>
-            <End>16:49</End>
         </Worktimes>
         <Date>05.07.2023</Date>
         <Count>2</Count>
@@ -8116,7 +8144,7 @@
         <Count>1</Count>
         <Worktimes>
             <Begin>10:44</Begin>
-            <End>16:05</End>
+            <End>16:08</End>
         </Worktimes>
         <Date>15.11.2023</Date>
         <Count>2</Count>
@@ -8154,7 +8182,7 @@
             <Begin>07:39</Begin>
             <End>11:40</End>
             <Begin>12:25</Begin>
-            <End>16:30</End>
+            <End>16:33</End>
         </Worktimes>
         <Date>29.11.2023</Date>
         <Count>2</Count>
@@ -8677,22 +8705,12 @@
             <End>16:11</End>
         </Worktimes>
         <Date>19.08.2024</Date>
-        <Count>3</Count>
+        <Count>0</Count>
         <Worktimes>
-            <Begin>08:12</Begin>
-            <End>12:19</End>
-            <Begin>13:04</Begin>
-            <End>15:22</End>
-            <Begin>17:19</Begin>
-            <End>18:07</End>
         </Worktimes>
         <Date>20.08.2024</Date>
-        <Count>2</Count>
+        <Count>0</Count>
         <Worktimes>
-            <Begin>08:15</Begin>
-            <End>12:20</End>
-            <Begin>13:05</Begin>
-            <End>15:52</End>
         </Worktimes>
         <Date>21.08.2024</Date>
         <Count>2</Count>
@@ -8723,8 +8741,10 @@
             <End>15:50</End>
         </Worktimes>
         <Date>29.08.2024</Date>
-        <Count>1</Count>
+        <Count>2</Count>
         <Worktimes>
+            <Begin>08:12</Begin>
+            <End>12:15</End>
             <Begin>13:00</Begin>
             <End>15:36</End>
         </Worktimes>
@@ -8981,6 +9001,24 @@
             <End>11:45</End>
             <Begin>12:30</Begin>
             <End>17:09</End>
+        </Worktimes>
+        <Date>25.11.2023</Date>
+        <Count>1</Count>
+        <Worktimes>
+            <Begin>16:03</Begin>
+            <End>17:13</End>
+        </Worktimes>
+        <Date>13.12.2023</Date>
+        <Count>2</Count>
+        <Worktimes>
+            <Begin>09:26</Begin>
+            <End>12:15</End>
+            <Begin>13:00</Begin>
+            <End>16:45</End>
+        </Worktimes>
+        <Date>14.01.2025</Date>
+        <Count>0</Count>
+        <Worktimes>
         </Worktimes>
     </Workdays>
 </Workpackage>
