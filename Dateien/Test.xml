@@ -9,6 +9,8 @@
       <End>09:23:00</End>
       <Begin>10:34:00</Begin>
       <End>11:23:00</End>
+      <Begin>08:34:00</Begin>
+      <End>09:23:00</End>
     </Worktimes>
   </Workdays>
 </Workpackage>
@@ -23,6 +25,20 @@
       <End>08:34:07</End>
       <Begin>09:33:11</Begin>
       <End>10:34:07</End>
+      <Begin>09:33:11</Begin>
+      <End>10:34:07</End>
+    </Worktimes>
+    <Date>14.10.2021</Date>
+    <Count>4</Count>
+    <Worktimes>
+      <Begin>07:20</Begin>
+      <End>09:35</End>
+      <Begin>11:15</Begin>
+      <End>12:05</End>
+      <Begin>12:50</Begin>
+      <End>17:20</End>
+      <Begin>10:13</Begin>
+      <End>10:40</End>
     </Worktimes>
   </Workdays>
 </Workpackage>

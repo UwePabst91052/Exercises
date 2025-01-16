@@ -633,7 +633,7 @@ def save_file():
 
 def save_file_as():
     global filename
-    filename = QtWidgets.QFileDialog.getOpenFileName(ex, "Speichere Datei", ".\Dateien", "XML Dateien (*.xml)")[0]
+    filename = QtWidgets.QFileDialog.getSaveFileName(ex, "Speichere Datei", ".\Dateien", "XML Dateien (*.xml)")[0]
     file = open(filename, 'w', encoding='utf-8')
     for wp in workpackages:
         write_workpackage(file, wp)
