@@ -2,14 +2,21 @@ import Workpackage as Wp
 from ReadWorkpackes import *
 from BerichtAusdrucken import *
 
-parameters1 = [
-    ["01.08.2024", "31.08.2024", "August 2024"],
-    ["01.09.2024", "30.09.2024", "September 2024"],
-    ["01.10.2024", "31.10.2024", "Oktober 2024"],
-    ["01.11.2024", "30.11.2024", "November 2024"],
-    ["01.12.2024", "31.12.2024", "Dezember 2024"]
-]
 parameters = [
+    ["01.01.2023", "31.01.2023", "Januar 2023"],
+    ["01.02.2023", "28.02.2023", "Februar 2023"],
+    ["01.03.2023", "31.03.2023", "März 2023"],
+    ["01.04.2023", "30.04.2023", "April 2023"],
+    ["01.05.2023", "31.05.2023", "Mai 2023"],
+    ["01.06.2023", "30.06.2023", "Juni 2023"],
+    ["01.07.2023", "31.07.2023", "Juli 2023"],
+    ["01.08.2023", "31.08.2023", "August 2023"],
+    ["01.09.2023", "30.09.2023", "September 2023"],
+    ["01.10.2023", "31.10.2023", "Oktober 2023"],
+    ["01.11.2023", "30.11.2023", "November 2023"],
+    ["01.12.2023", "31.12.2023", "Dezember 2023"],
+]
+parameters4 = [
     ["01.08.2024", "31.08.2024", "August 2024"]
 ]
 
@@ -59,14 +66,14 @@ def show_num_workdays(from_date, until_date, workpackages):
     return report
 
 def main():
-    filename = ".\\Dateien\\HomeOfficeNeu.xml"
+    filename = ".\\Dateien\\HomeOffice.xml"
     
     inFile = open(filename, "r", encoding="utf-8")
     workpackages = read_workpackages(inFile)
     inFile.close()
 
     for timespan in parameters:
-        outfilename = ".\\Dateien\\Report " + timespan[2] + ".txt"
+        outfilename = "D:\\temp\\ZeiterfassungBerichte\\Report " + timespan[2] + ".txt"
         outFile = open(outfilename, "w", encoding="utf-8")
         report = show_num_workdays(timespan[0], timespan[1], workpackages)
         outFile.write(report)
