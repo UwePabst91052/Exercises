@@ -7235,7 +7235,7 @@
         <Worktimes>
             <Begin>08:04</Begin>
             <End>12:11</End>
-            <Begin>12:49</Begin>
+            <Begin>12:56</Begin>
             <End>16:49</End>
         </Worktimes>
         <Date>17.01.2025</Date>
@@ -7258,7 +7258,7 @@
 </Workpackage>
 <Workpackage>
     <Name>Buero</Name>
-    <Count>211</Count>
+    <Count>212</Count>
     <Workdays>
         <Date>21.09.2022</Date>
         <Count>2</Count>
@@ -8914,7 +8914,7 @@
             <Begin>08:18</Begin>
             <End>12:10</End>
             <Begin>12:55</Begin>
-            <End>16:10</End>
+            <End>16:14</End>
         </Worktimes>
         <Date>21.01.2025</Date>
         <Count>2</Count>
@@ -8929,8 +8929,12 @@
         <Worktimes>
             <Begin>08:12</Begin>
             <End>11:45</End>
-            <Begin>12:45</Begin>
-            <End>16:15</End>
+            <Begin>12:30</Begin>
+            <End>16:14</End>
+        </Worktimes>
+        <Date>23.01.2025</Date>
+        <Count>0</Count>
+        <Worktimes>
         </Worktimes>
     </Workdays>
 </Workpackage>
