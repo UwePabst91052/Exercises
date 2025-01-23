@@ -693,7 +693,7 @@ def show_balance():
     keylist = create_work_dictionary(workpackageMerged)
     timespan = input_timespan(keylist[0],
                               keylist[len(keylist) - 1])
-    report = report_work_summary_timespan("Otto Normalverbraucher", workpackages, timespan[0], timespan[1])
+    report = report_work_summary_timespan("Otto Normalverbraucher", workpackageMerged, timespan[0], timespan[1])
     display_report(report)
 
 def show_num_workdays():

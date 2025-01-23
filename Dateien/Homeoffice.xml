@@ -8925,10 +8925,12 @@
             <End>15:54</End>
         </Worktimes>
         <Date>22.01.2025</Date>
-        <Count>1</Count>
+        <Count>2</Count>
         <Worktimes>
             <Begin>08:12</Begin>
             <End>11:45</End>
+            <Begin>12:45</Begin>
+            <End>16:15</End>
         </Worktimes>
     </Workdays>
 </Workpackage>
