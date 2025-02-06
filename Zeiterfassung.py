@@ -641,7 +641,10 @@ def save_file_as():
 
 
 def show_report():
-    report = report_work_summary("Otto Normalverbraucher", workpackages)
+    keylist = create_work_dictionary(workpackages)
+    timespan = input_timespan(keylist[0],
+                              keylist[len(keylist) - 1])
+    report = report_work_summary_timespan("Otto Normalverbraucher", workpackages, timespan[0], timespan[1])
     display_report(report)
 
 
