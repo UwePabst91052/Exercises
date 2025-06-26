@@ -592,8 +592,9 @@ def new_file():
 
 def open_file():
     global filename
-    file_name = QtWidgets.QFileDialog.getOpenFileName(ex, "Öffne Datei", ".\Dateien", "XML Dateien (*.xml)")[0]
-    open_data_file(file_name)
+    file_name = QtWidgets.QFileDialog.getOpenFileName(ex, "Öffne Datei", "./Dateien", "XML Dateien (*.xml)")[0]
+    if file_name:  # Only open if a file was selected
+        open_data_file(file_name)
 
 
 def open_data_file(file_name):
@@ -633,7 +634,7 @@ def save_file():
 
 def save_file_as():
     global filename
-    filename = QtWidgets.QFileDialog.getSaveFileName(ex, "Speichere Datei", ".\Dateien", "XML Dateien (*.xml)")[0]
+    filename = QtWidgets.QFileDialog.getSaveFileName(ex, "Speichere Datei", "./Dateien", "XML Dateien (*.xml)")[0]
     file = open(filename, 'w', encoding='utf-8')
     for wp in workpackages:
         write_workpackage(file, wp)
